@@ -47,6 +47,25 @@ export interface AnalysisScores {
   total: number;
 }
 
+export interface AnalysisSection {
+  title: string;
+  status: 'SAFE' | 'NEUTRAL' | 'DANGER';
+  content: string;
+}
+
+export interface TokenomicsItem {
+  label: string;
+  value: number;
+}
+
+export interface TokenomicsData {
+  mcap: string;
+  fdv: string;
+  circulatingSupply: string;
+  totalSupply: string;
+  distribution: TokenomicsItem[];
+}
+
 export interface AnalysisResult {
   tokenName: string;
   ticker: string;
@@ -58,5 +77,7 @@ export interface AnalysisResult {
   growthPotential: string;
   verdict: 'STRONG BUY' | 'BUY' | 'HOLD' | 'AVOID' | 'STRONG BULLISH' | 'BULLISH' | 'NEUTRAL' | 'BEARISH' | 'RUG RISK';
   verdictExplanation: string;
-  fullAnalysisText: string; // The raw markdown from the model
+  fullAnalysisText: string; 
+  sections: AnalysisSection[];
+  tokenomicsData: TokenomicsData;
 }

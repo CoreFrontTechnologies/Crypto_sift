@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { Search, Shield, Activity, Code, Cpu } from 'lucide-react';
+import { Search, Shield, Activity, Code, Cpu, Timer } from 'lucide-react';
 
 interface AnalysisFormProps {
   onAnalyze: (query: string) => void;
@@ -9,6 +9,19 @@ interface AnalysisFormProps {
 
 export default function AnalysisForm({ onAnalyze, isLoading }: AnalysisFormProps) {
   const [query, setQuery] = useState('');
+  const [timeLeft, setTimeLeft] = useState(60);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isLoading && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+      }, 1000);
+    } else if (!isLoading) {
+      setTimeLeft(60); // Reset to 60
+    }
+    return () => clearInterval(timer);
+  }, [isLoading, timeLeft]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,31 +79,56 @@ export default function AnalysisForm({ onAnalyze, isLoading }: AnalysisFormProps
 
       {isLoading && (
         <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           className="text-center pt-8 space-y-6"
         >
-          <div className="flex justify-center gap-3">
-            {[0, 1, 2].map((i) => (
+          <div className="flex flex-col items-center gap-4">
+             <div className="relative flex items-center justify-center">
+                <motion.div
+                  animate={{ 
+                    rotate: 360,
+                  }}
+                  transition={{ 
+                    repeat: Infinity, 
+                    duration: 8, 
+                    ease: "linear"
+                  }}
+                  className="absolute w-24 h-24 border-2 border-emerald-500/20 border-t-emerald-500 rounded-full"
+                />
+                <div className="flex flex-col items-center justify-center bg-zinc-900 w-20 h-20 rounded-full border border-zinc-800 shadow-xl">
+                   <span className="text-2xl font-black text-emerald-500 tabular-nums">{timeLeft}</span>
+                   <span className="text-[8px] font-bold text-zinc-500 uppercase tracking-tighter">Seconds</span>
+                </div>
+             </div>
+
+             <div className="space-y-1.5">
+                <div className="flex items-center justify-center gap-2 text-emerald-500">
+                   <Timer size={14} className="animate-pulse" />
+                   <p className="text-xs font-mono uppercase tracking-[0.3em] font-black italic">Extracting Forensic Data</p>
+                </div>
+                <p className="text-[10px] text-zinc-600 font-mono uppercase tracking-wider">
+                  {timeLeft > 20 ? 'Synchronizing with Neural Nodes...' : 'Finalizing Report Generation...'}
+                </p>
+             </div>
+          </div>
+
+          <div className="flex justify-center gap-2">
+            {[0, 1, 2, 3, 4].map((i) => (
               <motion.div
                 key={i}
                 animate={{ 
-                  scale: [1, 1.3, 1],
+                  scale: [1, 1.5, 1],
                   opacity: [0.3, 1, 0.3],
-                  backgroundColor: ['#10b981', '#06b6d4', '#10b981']
                 }}
                 transition={{ 
                   repeat: Infinity, 
-                  duration: 2, 
-                  delay: i * 0.3 
+                  duration: 1.5, 
+                  delay: i * 0.2 
                 }}
-                className="w-2.5 h-2.5 rounded-full blur-[1px]"
+                className="w-1.5 h-1.5 rounded-full bg-emerald-500"
               />
             ))}
-          </div>
-          <div className="space-y-1.5">
-             <p className="text-xs font-mono text-emerald-500 uppercase tracking-[0.3em] font-black italic">Initiating Forensic Engine</p>
-             <p className="text-[10px] text-zinc-600 font-mono uppercase tracking-wider">Synchronizing with Decentralized Intelligence Nodes...</p>
           </div>
         </motion.div>
       )}

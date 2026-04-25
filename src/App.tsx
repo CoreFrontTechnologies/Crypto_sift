@@ -83,7 +83,7 @@ export default function App() {
                <ShieldCheck className="text-zinc-950" size={18} />
              </div>
              <div className="flex flex-col">
-                <span className="text-sm font-extrabold tracking-tight uppercase leading-none">Sayyed-Sift</span>
+                <span className="text-sm font-extrabold tracking-tight uppercase leading-none">Crypto Exposer</span>
                 <span className="text-[10px] text-zinc-500 font-mono font-medium tracking-tighter uppercase">Forensic Analyst V5</span>
              </div>
           </button>
@@ -183,7 +183,7 @@ export default function App() {
             >
               <div className="max-w-3xl space-y-4">
                 <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
-                  Next-Gen <span className="text-emerald-500">Sayyed-Sift</span> Forensic AI.
+                  Next-Gen <span className="text-emerald-500">Crypto Exposer</span> Forensic AI.
                 </h2>
                 <div className="flex items-start gap-4 p-5 card-glass border-emerald-500/20 bg-emerald-500/5">
                    <div className="mt-1">
