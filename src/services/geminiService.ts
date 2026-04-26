@@ -43,13 +43,14 @@ export async function analyzeProjectAutomated(query: string): Promise<AnalysisRe
   const ai = getAiClient();
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "gemini-3-flash-preview",
       contents: `Conduct an exhaustive institutional audit on: ${query}`,
       config: {
         tools: [{ googleSearch: {} }],
         toolConfig: { includeServerSideToolInvocations: true },
         systemInstruction: SYSTEM_INSTRUCTION,
         responseMimeType: "application/json",
+        temperature: 0.2,
         responseSchema: {
           type: Type.OBJECT,
           required: ["tokenName", "ticker", "summary", "scores", "pros", "cons", "risks", "growthPotential", "verdict", "verdictExplanation", "fullAnalysisText", "sections", "tokenomicsData"],

@@ -61,14 +61,14 @@ export default function AnalysisForm({ onAnalyze, isLoading }: AnalysisFormProps
         </div>
       </form>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 px-4 md:place-items-center">
         {[
           { icon: Shield, label: 'VC Forensics' },
           { icon: Activity, label: 'Live Liquidity' },
           { icon: Code, label: 'Stack Integrity' },
           { icon: Cpu, label: 'Compute Moat' },
         ].map((item, i) => (
-          <div key={i} className="flex items-center gap-3 text-zinc-500">
+          <div key={i} className="flex items-center gap-3 text-zinc-500 w-full md:justify-center">
             <div className="p-1.5 rounded bg-zinc-900/50">
                <item.icon size={14} className="text-zinc-600" />
             </div>

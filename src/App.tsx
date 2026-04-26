@@ -179,14 +179,14 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="space-y-12 max-w-3xl mx-auto"
+              className="space-y-12 max-w-3xl mx-auto md:text-center"
             >
               <div className="space-y-4">
                 <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
                   Next-Gen <span className="text-emerald-500">Crypto Exposer</span> Forensic AI.
                 </h2>
-                <div className="flex items-start gap-4 p-5 card-glass border-emerald-500/20 bg-emerald-500/5">
-                   <div className="mt-1">
+                <div className="flex items-start md:items-center gap-4 p-5 card-glass border-emerald-500/20 bg-emerald-500/5 text-left md:text-center md:flex-col lg:flex-row lg:text-left">
+                   <div className="mt-1 md:mt-0">
                       <Info className="text-emerald-500" size={20} />
                    </div>
                    <p className="text-zinc-300 text-sm leading-relaxed font-medium">
