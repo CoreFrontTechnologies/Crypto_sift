@@ -1,6 +1,13 @@
-import { AnalysisResult, AnalysisSection } from '../types';
+import { AnalysisResult, AnalysisSection, TeamMember, Investor, Competitor, TVLData, UsecaseInfo, UtilityInfo, RoadmapInfo } from '../types';
 import { motion } from 'motion/react';
 import ReactMarkdown from 'react-markdown';
+import TeamDossier from './TeamDossier';
+import InvestorMap from './InvestorMap';
+import VestingDashboard from './VestingDashboard';
+import CompetitorMatrix from './CompetitorMatrix';
+import UsecaseDossier from './UsecaseDossier';
+import UtilityDossier from './UtilityDossier';
+import RoadmapDossier from './RoadmapDossier';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -16,7 +23,9 @@ import {
   Zap,
   Users,
   Wallet,
-  ShieldAlert
+  ShieldAlert,
+  Flame,
+  Map
 } from 'lucide-react';
 
 interface AnalysisReportProps {
@@ -74,13 +83,29 @@ const getSectionIcon = (title: string) => {
   if (t.includes('team')) return <Users size={20} />;
   if (t.includes('investor')) return <Globe size={20} />;
   if (t.includes('tokenomics')) return <Wallet size={20} />;
-  if (t.includes('tech') || t.includes('alpha')) return <Zap size={20} />;
+  if (t.includes('usecase') || t.includes('roadmap')) return <Map size={20} />;
   if (t.includes('risk') || t.includes('scam')) return <ShieldAlert size={20} />;
   return <BarChart3 size={20} />;
 };
 
+const getVerdictStyles = (verdict: string) => {
+  const v = verdict.toUpperCase();
+  if (v.includes('STRONGLY BUY')) return { bg: 'bg-emerald-500/20', border: 'border-emerald-500/50', text: 'text-emerald-400', icon: <TrendingUp size={24} /> };
+  if (v.includes('BUY')) return { bg: 'bg-emerald-500/10', border: 'border-emerald-500/30', text: 'text-emerald-400', icon: <TrendingUp size={20} /> };
+  if (v.includes('HOLD')) return { bg: 'bg-cyan-500/10', border: 'border-cyan-500/30', text: 'text-cyan-400', icon: <Clock size={20} /> };
+  if (v.includes('STRONGLY')) return { bg: 'bg-red-500/20', border: 'border-red-500/50', text: 'text-red-400', icon: <ShieldAlert size={24} /> };
+  if (v.includes('AVOID') || v.includes('SELL')) return { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-400', icon: <TrendingDown size={20} /> };
+  return { bg: 'bg-zinc-500/10', border: 'border-zinc-500/30', text: 'text-zinc-400', icon: <BarChart3 size={20} /> };
+};
+
 export default function AnalysisReport({ result, onReset }: AnalysisReportProps) {
-  const isBullish = result.verdict.toLowerCase().includes('buy') || result.verdict.toLowerCase().includes('bullish');
+  const verdictStyles = getVerdictStyles(result.verdict);
+  const isBullish = result.verdict.toUpperCase().includes('BUY');
+  const isNeutral = result.verdict.toUpperCase().includes('HOLD');
+  const isBearish = !isBullish && !isNeutral;
+
+  const scoreColor = isBullish ? 'text-emerald-500' : isNeutral ? 'text-cyan-500' : 'text-red-500';
+  const progressBg = isBullish ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]' : isNeutral ? 'bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.5)]' : 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]';
 
   const handleDownload = () => {
     window.print();
@@ -106,7 +131,7 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 font-sans">
       {/* Action Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-zinc-800 pb-8 no-print">
         <button 
@@ -120,13 +145,13 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
         <div className="flex items-center gap-3 w-full md:w-auto">
           <button 
             onClick={handleDownload}
-            className="flex-1 md:flex-none button-secondary text-xs h-10 px-4"
+            className="flex-1 md:flex-none h-11 px-6 rounded-xl bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs font-bold uppercase tracking-widest hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
           >
             <Download size={14} /> Download PDF Audit
           </button>
           <button 
             onClick={handleShare}
-            className="flex-1 md:flex-none button-primary text-xs h-10 px-4"
+            className="flex-1 md:flex-none h-11 px-6 rounded-xl bg-emerald-600 text-white text-xs font-bold uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
           >
             <Share2 size={14} /> Share Intelligence
           </button>
@@ -137,12 +162,6 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
       <div className="card-glass p-8 md:p-12 relative overflow-hidden ring-1 ring-emerald-500/10">
         <div className="absolute top-0 right-0 p-8 opacity-5 flex flex-col items-end print:hidden">
            <ShieldCheck size={120} />
-        </div>
-        
-        {/* Print Brand (Hidden in UI) */}
-        <div className="hidden print:block mb-8 border-b-2 border-emerald-500 pb-4">
-           <h2 className="text-2xl font-black text-zinc-950 uppercase">Crypto Exposer Forensic Report</h2>
-           <p className="text-zinc-500 text-xs font-mono uppercase tracking-[0.2em]">Forensic Token Intelligence</p>
         </div>
         
         <div className="relative z-10 space-y-6">
@@ -167,19 +186,19 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
                <div className="text-right">
                   <span className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">Exposure Level</span>
                   <div className="flex items-baseline gap-1">
-                    <span className={`text-5xl font-black tabular-nums ${isBullish ? 'text-emerald-500' : 'text-red-500'}`}>
+                    <span className={`text-5xl font-black tabular-nums ${scoreColor}`}>
                        {result.scores.total}
                     </span>
                     <span className="text-zinc-600 text-xl font-bold">/100</span>
                   </div>
                </div>
                
-               <div className={`h-20 w-1.5 rounded-full ${isBullish ? 'bg-emerald-500/20' : 'bg-red-500/20'}`}>
+               <div className={`h-20 w-1.5 rounded-full bg-zinc-800`}>
                   <motion.div 
                     initial={{ height: 0 }}
                     animate={{ height: `${result.scores.total}%` }}
                     transition={{ duration: 1.5, ease: "easeOut" }}
-                    className={`w-full rounded-full ${isBullish ? 'bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]'}`}
+                    className={`w-full rounded-full ${progressBg}`}
                   />
                </div>
             </div>
@@ -189,13 +208,16 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
 
       {/* Grid: Verdict & Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className={`col-span-1 p-8 rounded-2xl border flex flex-col justify-between h-full ${isBullish ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+        <div className={`col-span-1 p-8 rounded-2xl border flex flex-col justify-between h-full ${verdictStyles.bg} ${verdictStyles.border}`}>
            <div>
               <div className="flex items-center gap-3 mb-6">
                 <span className="bg-zinc-950 text-zinc-400 text-[9px] font-mono px-2 py-0.5 rounded border border-zinc-700">FINAL RECOMMENDATION</span>
               </div>
-              <div className={`text-4xl font-black mb-2 uppercase tracking-tighter ${isBullish ? 'text-emerald-400' : 'text-red-400'}`}>
-                 {result.verdict}
+              <div className="flex items-center gap-3 mb-2">
+                 <div className={verdictStyles.text}>{verdictStyles.icon}</div>
+                 <div className={`text-4xl font-black uppercase tracking-tighter ${verdictStyles.text}`}>
+                    {result.verdict}
+                 </div>
               </div>
               <div className="h-0.5 w-12 bg-current opacity-20 mb-6" />
            </div>
@@ -205,7 +227,7 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
                 "{result.summary}"
               </p>
               <div className="text-xs text-zinc-500 border-t border-zinc-800/50 pt-4">
-                 <span className="block font-bold mb-1 opacity-50 uppercase tracking-tighter">Forensic Conclusion:</span>
+                 <span className="block font-bold mb-1 opacity-50 uppercase tracking-tighter">Strategic Advice:</span>
                  {result.verdictExplanation}
               </div>
            </div>
@@ -220,14 +242,18 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
               {[
                 { label: 'Tokenomics', score: result.scores.tokenomics },
                 { label: 'Team', score: result.scores.team },
-                { label: 'Tech Alpha', score: result.scores.useCase },
+                { label: 'Usecase', score: result.scores.technologyUsecase },
                 { label: 'Investors', score: result.scores.investors },
-                { label: 'Market Moat', score: result.scores.competition },
-                { label: 'Sentiment', score: result.scores.sentiment },
+                { label: 'Competitors', score: result.scores.competitors },
+                { label: 'Utility', score: result.scores.utility },
+                { label: 'TVL & Vesting', score: result.scores.tvl },
+                { label: 'Community', score: result.scores.community },
               ].map((v, i) => (
-                <div key={i} className="space-y-3">
+                <div key={i} className="space-y-3 relative group">
                    <div className="flex justify-between items-center px-0.5">
-                      <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">{v.label}</span>
+                      <div className="flex items-center gap-1.5 focus:outline-none">
+                        <span className="text-[10px] font-mono font-bold text-zinc-500 uppercase tracking-widest">{v.label}</span>
+                      </div>
                       <span className="text-xs font-bold text-zinc-300">{v.score}/100</span>
                    </div>
                    <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
@@ -310,7 +336,70 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
                 </div>
              </div>
            )}
+
+           {/* Burning Mechanism Forensic */}
+           {result.tokenomicsData.burningMechanism && (
+             <div className="px-8 pb-8 pt-6 border-t border-zinc-800/50 bg-orange-500/5">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
+                   <div className="space-y-1">
+                      <div className="flex items-center gap-1.5 text-orange-500">
+                         <Flame size={14} />
+                         <span className="text-[10px] font-black uppercase tracking-widest">Burning Forensic</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                         <span className="text-[11px] px-1.5 py-0.5 bg-orange-500/20 text-orange-400 rounded-md font-mono uppercase font-black border border-orange-500/20">
+                            {result.tokenomicsData.burningMechanism.type}
+                         </span>
+                         {result.tokenomicsData.burningMechanism.percentageBurned && (
+                            <span className="text-[11px] text-orange-300 font-bold tabular-nums">
+                               {result.tokenomicsData.burningMechanism.percentageBurned} Burned
+                            </span>
+                         )}
+                      </div>
+                   </div>
+                   <div className="hidden md:block h-8 w-px bg-zinc-800" />
+                   <p className="text-[11px] text-zinc-400 flex-1 leading-relaxed">
+                      {result.tokenomicsData.burningMechanism.description}
+                   </p>
+                </div>
+             </div>
+           )}
         </div>
+      )}
+
+      {/* Usecase Dossier */}
+      {result.usecaseInfo && (
+        <UsecaseDossier info={result.usecaseInfo} />
+      )}
+
+      {/* Utility Dossier */}
+      {result.utilityInfo && (
+        <UtilityDossier info={result.utilityInfo} />
+      )}
+
+      {/* Roadmap Dossier */}
+      {result.roadmapInfo && (
+        <RoadmapDossier info={result.roadmapInfo} />
+      )}
+
+      {/* Team Dossier */}
+      {result.team && result.team.length > 0 && (
+        <TeamDossier team={result.team} />
+      )}
+
+      {/* Investor Map */}
+      {result.investors && result.investors.length > 0 && (
+        <InvestorMap investors={result.investors} />
+      )}
+
+      {/* TVL & Vesting Dashboard */}
+      {result.tvlData && (
+        <VestingDashboard data={result.tvlData} />
+      )}
+
+      {/* Competitor Matrix */}
+      {result.competitors && result.competitors.length > 0 && (
+        <CompetitorMatrix competitors={result.competitors} />
       )}
 
       {/* Forensic Breakdown Sections */}

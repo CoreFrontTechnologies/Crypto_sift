@@ -53,4 +53,4 @@ To ensure the application functions correctly on Netlify, you MUST set the follo
 This tool provides AI-generated analysis for educational and informational purposes only. It does not constitute financial advice. Always perform your own due diligence before making investment decisions.
 
 ---
-© 2026 Crypto Exposer. All rights reserved. Developed with passion by **Sayyed Muhammad**.
+© 2024 Crypto Exposer. All rights reserved. Developed with passion by **Sayyed Muhammad**.
