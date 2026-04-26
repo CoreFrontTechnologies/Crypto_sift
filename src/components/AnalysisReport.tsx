@@ -188,8 +188,8 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
       </div>
 
       {/* Grid: Verdict & Summary */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className={`col-span-1 p-8 rounded-2xl border flex flex-col justify-between ${isBullish ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className={`col-span-1 p-8 rounded-2xl border flex flex-col justify-between h-full ${isBullish ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
            <div>
               <div className="flex items-center gap-3 mb-6">
                 <span className="bg-zinc-950 text-zinc-400 text-[9px] font-mono px-2 py-0.5 rounded border border-zinc-700">FINAL RECOMMENDATION</span>
@@ -211,12 +211,12 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
            </div>
         </div>
 
-        <div className="col-span-1 lg:col-span-2 card-glass p-8 bg-zinc-900/30">
+        <div className="col-span-1 md:col-span-2 card-glass p-8 bg-zinc-900/30 flex flex-col h-full">
            <div className="flex items-center gap-3 mb-8">
               <BarChart3 className="text-zinc-500" size={20} />
               <h3 className="font-bold uppercase tracking-wider text-sm">Security Vectors</h3>
            </div>
-           <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-8">
+           <div className="grid grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-8 flex-1">
               {[
                 { label: 'Tokenomics', score: result.scores.tokenomics },
                 { label: 'Team', score: result.scores.team },
@@ -331,7 +331,7 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
                        initial={{ opacity: 0, y: 20 }}
                        animate={{ opacity: 1, y: 0 }}
                        transition={{ delay: idx * 0.1 }}
-                       className={`card-glass overflow-hidden ${styles.border} bg-zinc-900/40 group ${styles.borderHover} transition-all`}
+                       className={`card-glass overflow-hidden ${styles.border} bg-zinc-900/40 group ${styles.borderHover} transition-all h-full flex flex-col`}
                     >
                        <div className={`${styles.bg} border-b border-zinc-800 px-6 py-4 flex items-center justify-between`}>
                           <div className="flex items-center gap-3">
@@ -349,7 +349,7 @@ export default function AnalysisReport({ result, onReset }: AnalysisReportProps)
                              </span>
                           </div>
                        </div>
-                       <div className="p-6 md:p-8 prose prose-zinc prose-invert prose-emerald max-w-none 
+                       <div className="p-6 md:p-8 prose prose-zinc prose-invert prose-emerald max-w-none flex-1 
                           prose-p:text-zinc-400 prose-p:text-sm prose-p:leading-relaxed prose-p:mb-4
                           prose-li:text-zinc-400 prose-li:text-sm prose-li:mb-1
                           prose-strong:text-zinc-200 prose-strong:font-bold

@@ -179,9 +179,9 @@ export default function App() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="space-y-12"
+              className="space-y-12 max-w-3xl mx-auto"
             >
-              <div className="max-w-3xl space-y-4">
+              <div className="space-y-4">
                 <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">
                   Next-Gen <span className="text-emerald-500">Crypto Exposer</span> Forensic AI.
                 </h2>
