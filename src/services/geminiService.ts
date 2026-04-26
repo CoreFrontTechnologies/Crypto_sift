@@ -6,7 +6,18 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiClient: GoogleGenAI | null = null;
+
+function getAiClient() {
+  if (!aiClient) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey === "undefined") {
+      throw new Error("MISSING API KEY: Please set GEMINI_API_KEY in your Netlify environment variables.");
+    }
+    aiClient = new GoogleGenAI({ apiKey });
+  }
+  return aiClient;
+}
 
 const SYSTEM_INSTRUCTION = `
 You are the lead forensic analyst for "Crypto Exposer". Your mission is to provide deep, vivid, yet simplified audits of cryptocurrency projects.
@@ -29,6 +40,7 @@ Your goal is to reveal the truth. If a project is a rug, say it. If it's the nex
 `;
 
 export async function analyzeProjectAutomated(query: string): Promise<AnalysisResult> {
+  const ai = getAiClient();
   try {
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
