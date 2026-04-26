@@ -43,7 +43,7 @@ export async function analyzeProjectAutomated(query: string): Promise<AnalysisRe
   const ai = getAiClient();
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
+      model: "gemini-1.5-pro",
       contents: `Conduct an exhaustive institutional audit on: ${query}`,
       config: {
         tools: [{ googleSearch: {} }],
@@ -127,9 +127,9 @@ export async function analyzeProjectAutomated(query: string): Promise<AnalysisRe
     
     // Handle Quota/Rate Limit Errors (429)
     if (error?.message?.includes('429') || error?.message?.includes('RESOURCE_EXHAUSTED')) {
-      throw new Error('NETWORK CAPACITY REACHED: You are currently out of Gemini API quota. Please wait 60 seconds and try again, or check your API billing settings.');
+      throw new Error('API QUOTA REACHED: Your current Gemini API key has run out of tokens. If you are on the free plan, wait 60 seconds and try again. On Netlify, ensure you added your billing info or check your API usage at aistudio.google.com.');
     }
     
-    throw new Error('CRITICAL ENGINE FAILURE: ' + (error?.message || 'Unknown internal analysis error.'));
+    throw new Error('INTERNAL ENGINE FAILURE: ' + (error?.message || 'The AI engine encountered an unexpected error. Please check your Netlify logs and environment variables.'));
   }
 }
