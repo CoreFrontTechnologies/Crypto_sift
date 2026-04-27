@@ -3,14 +3,11 @@ import { motion } from 'motion/react';
 import { TeamMember } from '../types';
 import { 
   Users, 
-  Linkedin, 
-  Twitter, 
   ExternalLink, 
   Award, 
   Briefcase,
   UserCheck,
-  Globe,
-  Github
+  Globe
 } from 'lucide-react';
 
 interface TeamDossierProps {
@@ -19,9 +16,9 @@ interface TeamDossierProps {
 
 const getSocialIcon = (platform: string) => {
   const p = platform.toLowerCase();
-  if (p.includes('linkedin')) return <Linkedin size={14} />;
-  if (p.includes('twitter') || p.includes('x')) return <Twitter size={14} />;
-  if (p.includes('github')) return <Github size={14} />;
+  if (p.includes('linkedin')) return <ExternalLink size={14} />;
+  if (p.includes('twitter') || p.includes('x')) return <Globe size={14} />;
+  if (p.includes('github')) return <ExternalLink size={14} />;
   return <Globe size={14} />;
 };
 
@@ -61,7 +58,7 @@ export default function TeamDossier({ team }: TeamDossierProps) {
                <div className="flex flex-col items-end">
                   <div className="text-[8px] font-mono text-zinc-500 uppercase mb-1">Trust Score</div>
                   <div className={`text-xl font-black ${member.trustScore > 80 ? 'text-emerald-500' : 'text-yellow-500'}`}>
-                     {member.trustScore}%
+                     {member.trustScore}/100
                   </div>
                </div>
             </div>
@@ -69,7 +66,7 @@ export default function TeamDossier({ team }: TeamDossierProps) {
             {/* Main Content */}
             <div className="p-6 space-y-6 flex-1">
                <div className="space-y-2">
-                  <p className="text-zinc-400 text-xs leading-relaxed line-clamp-4 italic">
+                  <p className="text-zinc-400 text-xs leading-relaxed italic">
                      "{member.bio}"
                   </p>
                </div>
@@ -181,7 +178,7 @@ export default function TeamDossier({ team }: TeamDossierProps) {
             <div className="text-center group-hover:-translate-y-1 transition-transform">
                <span className="block text-[10px] font-mono text-zinc-500 uppercase mb-1">Audit Score</span>
                <span className="text-2xl font-black text-emerald-500 tabular-nums">
-                  {Math.round(team.reduce((acc, m) => acc + m.trustScore, 0) / team.length)}
+                  {Math.round(team.reduce((acc, m) => acc + m.trustScore, 0) / team.length)}/100
                </span>
             </div>
             <div className="w-px h-10 bg-zinc-800 hidden md:block" />

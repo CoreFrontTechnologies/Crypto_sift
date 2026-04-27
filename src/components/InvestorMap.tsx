@@ -3,8 +3,6 @@ import { motion } from 'motion/react';
 import { Investor } from '../types';
 import { 
   Building2, 
-  Linkedin, 
-  Twitter, 
   Globe, 
   ShieldCheck,
   Zap,
@@ -18,8 +16,8 @@ interface InvestorMapProps {
 
 const getSocialIcon = (platform: string) => {
   const p = platform.toLowerCase();
-  if (p.includes('linkedin')) return <Linkedin size={14} />;
-  if (p.includes('twitter') || p.includes('x')) return <Twitter size={14} />;
+  if (p.includes('linkedin')) return <ExternalLink size={14} />;
+  if (p.includes('twitter') || p.includes('x')) return <Globe size={14} />;
   return <Globe size={14} />;
 };
 

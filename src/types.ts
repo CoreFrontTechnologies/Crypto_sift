@@ -169,7 +169,7 @@ export interface AnalysisResult {
   cons: string[];
   risks: string[];
   growthPotential: string;
-  verdict: 'STRONG BUY' | 'BUY' | 'HOLD' | 'AVOID' | 'STRONG BULLISH' | 'BULLISH' | 'NEUTRAL' | 'BEARISH' | 'RUG RISK' | 'Sell';
+  verdict: 'STRONGLY BUY' | 'BUY' | 'HOLD' | 'AVOID' | 'SELL' | 'STRONGLY SELL' | 'STRONGLY AVOID';
   verdictExplanation: string;
   fullAnalysisText: string; 
   sections: AnalysisSection[];
@@ -181,4 +181,5 @@ export interface AnalysisResult {
   usecaseInfo: UsecaseInfo;
   utilityInfo: UtilityInfo;
   roadmapInfo: RoadmapInfo;
+  logoUrl?: string;
 }

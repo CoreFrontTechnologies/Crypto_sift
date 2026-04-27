@@ -4,7 +4,6 @@ import { UsecaseInfo } from '../types';
 import { 
   Puzzle, 
   Search,
-  Github, 
   Zap, 
   ExternalLink,
   Target
@@ -63,7 +62,7 @@ export default function UsecaseDossier({ info }: UsecaseDossierProps) {
            <div className="grid grid-cols-2 gap-4">
               <div className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 space-y-2">
                  <div className="flex items-center gap-2">
-                    <Github size={12} className="text-zinc-500" />
+                    <Search size={12} className="text-zinc-500" />
                     <span className="text-[9px] font-mono text-zinc-500 uppercase tracking-widest">Repo activity</span>
                  </div>
                  <div className="text-lg font-black text-white">{info.githubActivity}</div>
